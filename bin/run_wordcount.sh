@@ -19,5 +19,10 @@ export SPARK_HOME=$SPARK_BASE/share/spark/
 export SPARK_JAR=$SPARK_HOME/lib/spark-assembly-1.1.0.1-hadoop2.5.0.1.1408041624.jar
 SPARK_CLASSPATH="${SPARK_CLASSPATH}:/home/gs/hadoop/current/share/hadoop/common/hadoop-gpl-compression.jar:$(ls ${HADOOP_PREFIX}/share/hadoop/hdfs/lib/YahooDNSToSwitchMapping-*.jar)"
 
-$SPARK_HOME/bin/spark-submit --driver-class-path $SPARK_CLASSPATH --queue=apg_p7 --class WordCountDriver --master yarn --deploy-mode cluster $PWD/target/spark-examples-1.2.jar
+INPUT=/user/zouzhile/wordcount/input
+OUTPUT=/user/zouzhile/wordcount/output
+
+hadoop fs -rm -r -f -skipTrash $OUTPUT
+
+$SPARK_HOME/bin/spark-submit --driver-class-path $SPARK_CLASSPATH --queue=apg_p7 --class WordCountDriver --master yarn --deploy-mode cluster $PWD/target/spark-examples-1.2.jar $INPUT $OUTPUT
 #$SPARK_HOME/bin/spark-submit --class WordCountDriver --master yarn-client --conf "spark.yarn.queue=apg_p7" $PWD/target/spark-examples-1.2.jar
