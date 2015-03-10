@@ -8,9 +8,9 @@ object WordCountDriver {
     val conf = new SparkConf().setAppName("WordCountSpark")
     val sc = new SparkContext(conf)
 
-    val f = sc.textFile("hdfs://appearfear.corp.ne1.yahoo.com:9000/README.md") 
+    val f = sc.textFile(args[0]) 
     val wc = f.flatMap(l => l.split("\\s+")).map(word => (word, 1)).reduceByKey( _ + _) 
-    wc.saveAsTextFile("hdfs://appearfear.corp.ne1.yahoo.com:9000/wc.txt")
+    wc.saveAsTextFile(args[1])
 
     sc.stop()
   }
