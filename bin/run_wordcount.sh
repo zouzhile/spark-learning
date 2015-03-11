@@ -25,4 +25,3 @@ OUTPUT=/user/zouzhile/wordcount/output
 hadoop fs -rm -r -f -skipTrash $OUTPUT
 
 $SPARK_HOME/bin/spark-submit --driver-class-path $SPARK_CLASSPATH --queue=apg_p7 --class WordCountDriver --master yarn --deploy-mode cluster $PWD/target/spark-examples-1.2.jar $INPUT $OUTPUT
-#$SPARK_HOME/bin/spark-submit --class WordCountDriver --master yarn-client --conf "spark.yarn.queue=apg_p7" $PWD/target/spark-examples-1.2.jar
