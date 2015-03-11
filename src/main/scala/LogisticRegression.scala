@@ -17,7 +17,7 @@ object LogisticRegressionDriver {
   // 0.0,-0.3173743619974614 0.9034702789806682
   // 1.0,4.759494447180777 3.407011867344781
   // 0.0,-0.7078607074437426 -0.7866705652344417
-  def toLabelPoint(line: String) : LabelPoint = {
+  def toLabeledPoint(line: String) : LabeledPoint = {
     val parts = line.split(',')
     val label = java.lang.Double.parseDouble(parts(0))
     val features = Vectors.dense(parts(1).trim().split(' ').map(java.lang.Double.parseDouble))
@@ -30,8 +30,8 @@ object LogisticRegressionDriver {
     val sc = new SparkContext(conf)
     
     // resolve params
-    val training = sc.textFile(args(0)).map(toLabelPoint(_))
-    val test = sc.textFile(args(1)).map(toLabelPoint(_))
+    val training = sc.textFile(args(0)).map(toLabeledPoint(_))
+    val test = sc.textFile(args(1)).map(toLabeledPoint(_))
     val numIterations = args(2).toInt // default 100
     val stepSize = args(3).toDouble // default 1
     val miniBatchFraction = args(4).toDouble // default 1.0
@@ -49,7 +49,7 @@ object LogisticRegressionDriver {
 
     // model training
     val model = algo.run(training) 
-    val modelRDD = sc.parallelize(model.weights)
+    val modelRDD = sc.parallelize(model.weights.toArray)
     val modelPath = output + "/model"
     modelRDD.saveAsObjectFile(modelPath) // modelRDD can be deserialized with sc.objectFile(modelPath)
     println("[Logistic Regression] Trained model saved to " + modelPath)  
