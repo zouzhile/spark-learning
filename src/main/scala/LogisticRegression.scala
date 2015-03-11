@@ -53,7 +53,7 @@ object LogisticRegressionDriver {
     val modelPath = output + "/model"
     modelRDD.saveAsObjectFile(modelPath) // modelRDD can be deserialized with sc.objectFile(modelPath)
     println("[Logistic Regression] Trained model saved to " + modelPath)  
-    println("[Logistic Regression] Weights: " + model.weights)
+    println("[Logistic Regression] Weights: " + model.weights.toArray)
 
     // predict over the test data
     model.clearThreshold()
